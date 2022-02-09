@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func main() {
 	var conferenceName = "Go conference"
@@ -33,6 +36,12 @@ func main() {
 		fmt.Println("How any ticket(s) do you want:")
 		fmt.Scan(&userTicket)
 
+		if userTicket > remainingTickets {
+			fmt.Printf("We only have %v tickets remaining, you cannot book %v tickets\n", remainingTickets,userTicket)
+		// continue restarts the loop instead of breaking it 
+			continue
+		}
+
 		remainingTickets= remainingTickets- userTicket
 		bookings= append(bookings, firstName + " "+ lastName)
 		
@@ -40,7 +49,23 @@ func main() {
 		
 		fmt.Printf("Thank you %v %v for buying %v tickets, you will receive a confirmation email at %v\n", firstName, lastName, userTicket, email)
 		fmt.Printf("Thank you for your purchase there are/is %v left\n", remainingTickets)
-		fmt.Printf("These are all the bookings: %v", bookings)
+
+		firstNames := [] string{}
+		// range defines the index and element of a slice or array
+		for _, booking := range bookings {
+		// we the fields action from the strings ackage to seperate words in a string
+			var name = strings.Fields(booking)
+			var firstName = name[0]
+			firstNames = append(firstNames, firstName)
+		}
+		fmt.Printf("These are all the bookings: %v\n", firstNames)
+
+
+		noTicketRemaining := remainingTickets == 0
+		if noTicketRemaining {
+			fmt.Printf("The %v is completely booked up\n", conferenceName)
+			break
+		}
 
 	}
 }
